@@ -1,7 +1,18 @@
----
-title: "PA1_template"
-output: word_document
----
+# report title
+
+
+
+```r
+require(knitr)
+```
+
+```
+## Loading required package: knitr
+```
+
+```r
+opts_chunk$set(echo = TRUE, cache = TRUE, cache.path = "cache/", fig.path = "figure/")
+```
 
 First we load the data and transform date field to Date.
 
@@ -38,7 +49,7 @@ So, the mean number of daily steps is 10766.19 and the median number of daily st
 with(daily.steps,hist(total.steps))
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+![](figure/unnamed-chunk-3-1.png) 
 Next we aggregate the average number of steps taken by 5 minute intervaland build a corresponding plot, also filtering out NA values.
 
 ```r
@@ -49,7 +60,7 @@ colnames(interval.steps) <- c("interval","mean.steps")
 with(interval.steps,plot(interval,mean.steps,type="l"))
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+![](figure/unnamed-chunk-4-1.png) 
 
 ```r
 #get the interval with maximum average steps
@@ -107,8 +118,9 @@ median.steps.filled
 with(daily.steps.filled,hist(total.steps))
 ```
 
-![plot of chunk unnamed-chunk-7](figure/unnamed-chunk-7-1.png) 
-So, our methods of filling does not change the average (it should not) and makes the median equal to the average 10766.19. Next we create a factor variable to distinguish between weekdays and weekend.
+![](figure/unnamed-chunk-7-1.png) 
+
+So, our method of filling does not change the average (it should not) and makes the median equal to the average 10766.19. Next we create a factor variable to distinguish between weekdays and weekend.
 
 ```r
 weekdays.labels <- unique(weekdays(activity.filled$date))[1:5]
@@ -116,6 +128,14 @@ activity.filled$wDay <-  factor((weekdays(activity.filled$date) %in% weekdays.la
                                 levels=1:2, labels=c('weekend', 'weekday'))
 ```
 Now we build a plot of average number of steps for weekdays and weekends.
+
+```r
+require(lattice) 
+```
+
+```
+## Loading required package: lattice
+```
 
 ```r
 interval.steps.wday <- aggregate(subset(activity.filled,wDay=="weekday")$steps,by=list(subset(activity.filled,wDay=="weekday")$interval),FUN=mean)
@@ -127,5 +147,5 @@ interval.steps.wend$wday <- "weekend"
 xyplot(mean.steps ~ interval | wday, data=rbind(interval.steps.wend,interval.steps.wday),layout = c(1, 2),type="l")
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
+![](figure/unnamed-chunk-9-1.png) 
 
